@@ -13,6 +13,7 @@
     "@discordjs/rest": "^1.0.1",
     "@types/node": "^18.0.6",
     "discord.js": "^14.1.2",
-    "node-fetch": "2.6.7"
+    "node-fetch": "2.6.7",
+    "staticmaps": "^1.10.0"
   }
 }
