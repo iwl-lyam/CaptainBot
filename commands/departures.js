@@ -15,7 +15,7 @@ module.exports = {
 	async execute(interaction) {
 		if (interaction.options.getInteger("amount") > 10 && interaction.options.getInteger("amount")) return interaction.reply({content:"Amount must be below 10!"})
 
-		interaction.deferReply()
+		await interaction.deferReply()
 		
 		fetch(`https://airlabs.co/api/v9/schedules?api_key=${apikey}&dep_iata=${interaction.options.getString("iata")}`).then(p => p.json()).then(res => {
 			let r = res.response
