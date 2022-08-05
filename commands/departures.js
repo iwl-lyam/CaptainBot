@@ -16,8 +16,10 @@ module.exports = {
 		if (interaction.options.getInteger("amount") > 10 && interaction.options.getInteger("amount")) return interaction.reply({content:"Amount must be below 10!"})
 
 		await interaction.deferReply()
-		
-		fetch(`https://airlabs.co/api/v9/schedules?api_key=${apikey}&dep_iata=${interaction.options.getString("iata")}`).then(p => p.json()).then(res => {
+
+		const link = `https://airlabs.co/api/v9/schedules?api_key=${apikey}&dep_iata=${interaction.options.getString("iata")}`
+		console.log(link)
+		fetch(link).then(p => p.json()).then(res => {
 			let r = res.response
 			let f = {}
 			let embeds = []
@@ -26,11 +28,16 @@ module.exports = {
 			
 			for (let i = 0; i < amount; i++) {
 				f = r[i]
+				console.log(Date.now())
+				console.log(f['dep_time_ts'])
+				if (f['dep_time_ts'] < Math.floor(Date.now() / 1000)) {
+					amount++
+					continue
+				}
 				if (f['cs_flight_iata']) {
 					amount++
 					continue
 				}
-				console.log("stuff")
 				let e = new EmbedBuilder()
 					.setTitle("Page " + (actual))
 					.setFields(

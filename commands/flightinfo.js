@@ -17,9 +17,7 @@ module.exports = {
 		let icao = !!interaction.options.getString('icao')
 		let reg = !!interaction.options.getString('iata')
 		let link = `https://airlabs.co/api/v9/flights?api_key=${apikey}&${icao ? "flight_icao="+id : "flight_iata="+id}`
-		let link2 = `https://airlabs.co/api/v9/flight?api_key=${apikey}&${icao ? "flight_icao="+id : "flight_iata="+id}`
 
-console.log(link)
 		fetch(link).then(r => r.json()).then(async res => {
 			let flight = res.response[0]
 			if (!flight) return interaction.editReply("There are no flights with this ICAO/IATA!")
@@ -40,7 +38,7 @@ console.log(link)
 							{ name: "Flight IATA", value: flight.flight_iata, inline: true },
 							{ name: "Origin", value: `${flight.dep_iata} (${flight.dep_icao})`, inline: true },
 							{ name: "Destination", value: `${flight.arr_iata} (${flight.arr_icao})`, inline: true },
-							{ name: "Airline", value: `${flight.airline_icao} (${flight.dep_iata})`, inline: true },
+							{ name: "Airline", value: `${flight.airline_icao} (${flight.airline_iata})`, inline: true },
 							{ name: "Aircraft", value: `${flight.aircraft_icao}`, inline: true },
 							{ name: "Status", value: `${flight.status}`, inline: true },
 							{ name: "Last updated", value: `<t:${flight.updated}>`, inline: true }
