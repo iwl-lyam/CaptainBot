@@ -28,8 +28,6 @@ module.exports = {
 			
 			for (let i = 0; i < amount; i++) {
 				f = r[i]
-				console.log(Date.now())
-				console.log(f['dep_time_ts'])
 				if (f['dep_time_ts'] < Math.floor(Date.now() / 1000)) {
 					amount++
 					continue
@@ -41,13 +39,17 @@ module.exports = {
 				let e = new EmbedBuilder()
 					.setTitle("Page " + (actual))
 					.setFields(
-						{ name: "Airline ICAO", value: f['airline_icao'], inline: true },
-						{ name: "Flight number", value: f['flight_number'], inline: true },
-						{ name: "Departure", value: `Terminal ${f['dep_terminal'] || "N/A"} (gate ${f['dep_gate'] || "N/A"}) @ <t:${f['dep_estimated_ts'] || f['dep_time_ts']}>`, inline: true },
-						{ name: "Arrival at " + f['arr_iata'], value: `Terminal ${f['arr_terminal'] || "N/A"} (gate ${f['arr_gate'] || "N/A"}) @ <t:${f['arr_estimated_ts'] || f['arr_time_ts']}>`, inline: true },
+						{ name: "Airline", value: f['airline_icao'], inline: true },
+						{ name: "Flight ICAO", value: f['flight_icao'], inline: true },
+						{ name: "Departure", value: `Terminal ${f['dep_terminal'] || "N/A"} (gate ${f['dep_gate'] || "N/A"})`, inline: true },
+						{ name: `Arrival at ${f['arr_iata']} (${f['arr_icao']})` , value: `Terminal ${f['arr_terminal'] || "N/A"} (gate ${f['arr_gate'] || "N/A"})`, inline: true },
+						{ name: "Arrival baggage belt", value: f['arr_baggage'] || "Not decided", inline: true },
+						{ name: "ETD (Estimated Time of Departure)", value: `<t:${f['dep_estimated_ts'] || f['dep_time_ts']}>`, inline: true },
+						{ name: "ETA (Estimated Time of Arrival)", value: `<t:${f['arr_estimated_ts'] || f['arr_time_ts']}>`, inline: true },
 						{ name: "Delayed", value: f['delay'] || "N/A", inline: true },
-						{ name: "Status", value: f['status'] }
+						{ name: "Status", value: f['status'], inline: true }
 					)
+					.setColor("#55FF55")
 				embeds.push(e)
 				actual++
 			}

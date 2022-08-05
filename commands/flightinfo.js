@@ -43,6 +43,8 @@ module.exports = {
 							{ name: "Status", value: `${flight.status}`, inline: true },
 							{ name: "Last updated", value: `<t:${flight.updated}>`, inline: true }
 						)
+						.setColor("#AA55AA")
+
 				]
 			})
 		})
