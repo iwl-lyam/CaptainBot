@@ -57,7 +57,7 @@ module.exports = {
 			if (embeds.length > 10) return interaction.editReply({content: "Amount must be below 10!"})
 			
 			
-			interaction.editReply({content: "Departures", embeds: embeds})
+			interaction.editReply({content: "Departures listed in order of Estimated Time of Departure", embeds: embeds})
 		})		
 	}
 }
