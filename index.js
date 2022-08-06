@@ -20,9 +20,7 @@ client.once('ready', () => {
 });
 
 client.on('interactionCreate', async interaction => {
-	if (!interaction.isChatInputCommand()) return;
-
-	const command = client.commands.get(interaction.commandName);
+	const command = client.commands.get(interaction.commandName || "help");
 
 	if (!command) return;
 
