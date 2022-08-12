@@ -41,7 +41,6 @@ module.exports = {
 				color: 11163050
 			}
 		
-			console.log(JSON.stringify(embed))
 			api(`/webhooks/${appid}/${interaction.token}`, {
 				body: {
 					embeds: [embed]
