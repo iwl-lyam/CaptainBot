@@ -1,5 +1,6 @@
 const {token} = require("./config.json")
 const fetch = require("node-fetch")
+const consola = require("consola")
 
 async function getApi(endpoint, json) {
 	let s = await fetch("https://discord.com/api/v10"+endpoint, {
@@ -9,6 +10,8 @@ async function getApi(endpoint, json) {
 			"Content-Type": "application/json"
 		}
 	})
+	if (s.ok) consola.success(`GET ${endpoint} ${s.status} ${s.statusText}`)
+	else consola.warn(`GET ${endpoint} ${s.status} ${s.statusText}`)
 	if (json) return await s.json()
 }
 async function api(endpoint, options, json) {
@@ -21,6 +24,10 @@ async function api(endpoint, options, json) {
 		},
 		body: JSON.stringify(options.body)
 	})
+
+	if (s.ok) consola.success(`${options.method||"POST"} ${endpoint} ${s.status} ${s.statusText}`)
+	else consola.warn(`${options.method||"POST"} ${endpoint} ${s.status} ${s.statusText}`)
+	
 	if (json) return await s.json()
 }
 

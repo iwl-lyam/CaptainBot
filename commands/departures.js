@@ -1,24 +1,24 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
-const fetch = require('node-fetch')
-const {apikey} = require("../config.json")
+const {apikey, appid} = require("../config.json")
 const {api} = require("../util")
+const fetch = require("node-fetch")
 
 
 module.exports = {
 	name: "departures",
 
 	async execute(interaction) {
-		if (interaction.options.getInteger("amount") > 10 && interaction.options.getInteger("amount")) return interaction.reply({content:"Amount must be below 10!"})
 
-		await interaction.deferReply()
+		await api(`/interactions/${interaction.id}/${interaction.token}/callback`, { body: {type: 5} }, false)
 
-		const link = `https://airlabs.co/api/v9/schedules?api_key=${apikey}&dep_iata=${interaction.options.getString("iata")}`
+		if (interaction.options["amount"] > 10 && interaction.options["amount"]) return api(`/webhooks/${appid}/${interaction.token}`, {method: "POST", body: {content:"Amount must be below 10!"}})
+
+		const link = `https://airlabs.co/api/v9/schedules?api_key=${apikey}&dep_iata=${interaction.options["iata"]}`
 		console.log(link)
 		fetch(link).then(p => p.json()).then(res => {
 			let r = res.response
 			let f = {}
 			let embeds = []
-			let amount = interaction.options.getInteger("amount") || 5
+			let amount = interaction.options["amount"] || 5
 			let actual = 1
 			
 			for (let i = 0; i < amount; i++) {
@@ -31,9 +31,9 @@ module.exports = {
 					amount++
 					continue
 				}
-				let e = new EmbedBuilder()
-					.setTitle("Page " + (actual))
-					.setFields(
+				let e = {
+					title: "Page " + actual,
+					fields: [
 						{ name: "Airline", value: f['airline_icao'], inline: true },
 						{ name: "Flight ICAO", value: f['flight_icao'], inline: true },
 						{ name: "Departure", value: `Terminal ${f['dep_terminal'] || "N/A"} (gate ${f['dep_gate'] || "N/A"})`, inline: true },
@@ -43,16 +43,20 @@ module.exports = {
 						{ name: "ETA (Estimated Time of Arrival)", value: `<t:${f['arr_estimated_ts'] || f['arr_time_ts']}>`, inline: true },
 						{ name: "Delayed", value: f['delay'] || "N/A", inline: true },
 						{ name: "Status", value: f['status'], inline: true }
-					)
-					.setColor("#55FF55")
+					],
+					color: "#55FF55"
+				}
 				embeds.push(e)
 				actual++
 			}
 
-			if (embeds.length > 10) return interaction.editReply({content: "Amount must be below 10!"})
+			if (embeds.length > 10) return api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Amount must be below 10!"}})
 			
-			
-			interaction.editReply({content: "Departures are in order of Scheduled Time of Departure (instead of estimated), so they might appear out of order even though they aren't", embeds: embeds})
+			//api(`/webhooks/${appid}/${interaction.token}`, {body: {embeds: [{title: "yes"}]}})
+			api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Departures are in order of Scheduled Time of Departure (instead of estimated), so they might appear out of order even though they aren't"}})
+			api(`/webhooks/${appid}/${interaction.token}`, {body:{embeds: embeds}})
+
+			console.log(JSON.stringify(embeds[0]))
 		})		
 	}
 }

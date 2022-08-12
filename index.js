@@ -55,6 +55,9 @@ gateway.on('message', function message(data) {
 
 function interaction(payload) {
 	let commandName = payload.d.data.name
+	let options = {}
+	payload.d.data.options.forEach(option => options[option.name] = option.value)
+	payload.d.options = options
 	eval(`require("./commands/${commandName}.js").execute(payload.d)`)
 }
 
