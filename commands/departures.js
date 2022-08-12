@@ -52,7 +52,6 @@ module.exports = {
 
 			if (embeds.length > 10) return api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Amount must be below 10!"}})
 			
-			//api(`/webhooks/${appid}/${interaction.token}`, {body: {embeds: [{title: "yes"}]}})
 			api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Departures are in order of Scheduled Time of Departure (instead of estimated), so they might appear out of order even though they aren't", embeds: embeds}})
 
 		})		
