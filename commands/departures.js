@@ -44,7 +44,7 @@ module.exports = {
 						{ name: "Delayed", value: f['delay'] || "N/A", inline: true },
 						{ name: "Status", value: f['status'], inline: true }
 					],
-					color: "#55FF55"
+					color: 5635925
 				}
 				embeds.push(e)
 				actual++
@@ -53,10 +53,8 @@ module.exports = {
 			if (embeds.length > 10) return api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Amount must be below 10!"}})
 			
 			//api(`/webhooks/${appid}/${interaction.token}`, {body: {embeds: [{title: "yes"}]}})
-			api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Departures are in order of Scheduled Time of Departure (instead of estimated), so they might appear out of order even though they aren't"}})
-			api(`/webhooks/${appid}/${interaction.token}`, {body:{embeds: embeds}})
+			api(`/webhooks/${appid}/${interaction.token}`, {body:{content: "Departures are in order of Scheduled Time of Departure (instead of estimated), so they might appear out of order even though they aren't", embeds: embeds}})
 
-			console.log(JSON.stringify(embeds[0]))
 		})		
 	}
 }
