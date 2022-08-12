@@ -2,9 +2,7 @@ const {SlashCommandBuilder, ActionRowBuilder, SelectMenuBuilder} = require('disc
 
 module.exports = {
 	name: "help",
-	command: new SlashCommandBuilder()
-		.setName("help")
-		.setDescription("Help with commands"),
+	
 	execute(interaction) {
 		const row = new ActionRowBuilder()
 			.addComponents(

@@ -1,16 +1,11 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
 const fetch = require('node-fetch')
 const {apikey} = require("../config.json")
+const {api} = require("../util")
 
 
 module.exports = {
 	name: "departures",
-	
-	command: new SlashCommandBuilder()
-		.setName('departures')
-		.addStringOption(option => option.setName("iata").setDescription("IATA of target airport").setRequired(true))				
-		.addIntegerOption(option => option.setName("amount").setDescription("Amount of departures to show"))
-		.setDescription('Get departure times at an airport'),
 
 	async execute(interaction) {
 		if (interaction.options.getInteger("amount") > 10 && interaction.options.getInteger("amount")) return interaction.reply({content:"Amount must be below 10!"})

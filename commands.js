@@ -1,33 +1,57 @@
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord.js');
-const { token } = require('./config.json');
-const fs = require('node:fs');
+const {api} = require("./util")
 
-const commands = [];
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-// Place your client and guild ids here
-const clientId = '1004089749046317177';
-const guildId = '876543210987654321';
-
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	commands.push(command.command.toJSON());
+let departures = {
+	"name": "departures",
+	"description": "Get departure times at an airport",
+	"options": [
+		{
+			"type": 3,
+			"name": "iata",
+			"description": "IATA code of the airport"
+		},
+		{
+			"type": 4,
+			"name": "amount",
+			"description": "Amount of departures to show"
+		}
+	]
+}
+let flightinfo = {
+  "name": "flightinfo",
+  "description": "Information for a flight",
+  "options": [
+    {
+      "type": 3,
+      "name": "iata",
+      "description": "IATA code of the flight"
+    },
+    {
+      "type": 3,
+      "name": "icao",
+      "description": "ICAO code of the flight"
+    }
+  ]
+}
+let help = {
+  "name": "help",
+  "description": "Help with commands",
+  "options": []
 }
 
-const rest = new REST({ version: '10' }).setToken(token);
+function refresh() {
+	console.log("Refreshing global application commands:")
 
-(async () => {
-	try {
-		console.log('Started refreshing application (/) commands.');
-
-		await rest.put(
-			Routes.applicationCommands(clientId),
-			{ body: commands },
-		);
-
-		console.log('Successfully reloaded application (/) commands.');
-	} catch (error) {
-		console.error(error);
-	}
-})();
+	api("/applications/1004089749046317177/commands", {
+		method: "POST",
+		body: departures
+	}, true).then(e=>console.log(e.name))
+	api("/applications/1004089749046317177/commands", {
+		method: "POST",
+		body: flightinfo
+	}, true).then(e=>console.log(e.name))
+	api("/applications/1004089749046317177/commands", {
+		method: "POST",
+		body: help
+	}, true).then(e=>console.log(e.name))
+}
+module.exports = refresh

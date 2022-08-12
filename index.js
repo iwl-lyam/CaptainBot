@@ -1,5 +1,7 @@
 const { token } = require('./config.json');
 const {WebSocket} = require("ws")
+const fetch = require("node-fetch")
+const commands = require("./commands.js")
 
 const GATEWAY = "wss://gateway.discord.gg/?v=10&encoding=json"
 
@@ -37,7 +39,10 @@ gateway.on('message', function message(data) {
 			break;
 
 		case 0:
-			if (payload.t === "READY") console.log("R 0 EVENT/READY")
+			if (payload.t === "READY") {
+				console.log("R 0 EVENT/READY")
+				commands()
+			}
 			else if (payload.t === "INTERACTION_CREATE") interaction(payload)
 			else console.log("R 0 EVENT")
 			break;
