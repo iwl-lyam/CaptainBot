@@ -19,11 +19,15 @@ module.exports = {
 			let f = {}
 			let embeds = []
 			let amount = interaction.options["amount"] || 5
+
+			if (!r) return api(`/webhooks/${appid}/${interaction.token}`, {body: {content: "The specified airport was not found."}})
 			let actual = 1
 			
 			for (let i = 0; i < amount; i++) {
 				f = r[i]
-				if (f['dep_time_ts'] < Math.floor(Date.now() / 1000)) {
+				if (!f) return api(`/webhooks/${appid}/${interaction.token}`, {body: {content: "The specified airport was not found."}})
+				console.log(f)
+				if (f['dep_time_ts'] || f['dep_time_ts'] || 0 < Math.floor(Date.now() / 1000)) {
 					amount++
 					continue
 				}
