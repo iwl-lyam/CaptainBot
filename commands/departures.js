@@ -27,22 +27,22 @@ module.exports = {
 					amount++
 					continue
 				}
-				if (f['cs_flight_iata']) {
+				if (f['cs_flight_iata'] || (!f['airline_icao'] || f['flight_icao'])) {
 					amount++
 					continue
 				}
 				let e = {
 					title: "Page " + actual,
 					fields: [
-						{ name: "Airline", value: f['airline_icao'], inline: true },
-						{ name: "Flight ICAO", value: f['flight_icao'], inline: true },
+						{ name: "Airline", value: f['airline_icao'] || "None", inline: true },
+						{ name: "Flight ICAO", value: f['flight_icao'] || "None", inline: true },
 						{ name: "Departure", value: `Terminal ${f['dep_terminal'] || "N/A"} (gate ${f['dep_gate'] || "N/A"})`, inline: true },
-						{ name: `Arrival at ${f['arr_iata']} (${f['arr_icao']})` , value: `Terminal ${f['arr_terminal'] || "N/A"} (gate ${f['arr_gate'] || "N/A"})`, inline: true },
+						{ name: `Arrival at ${f['arr_iata'] || "N/A"} (${f['arr_icao']||"N/A"})` , value: `Terminal ${f['arr_terminal'] || "N/A"} (gate ${f['arr_gate'] || "N/A"})`, inline: true },
 						{ name: "Arrival baggage belt", value: f['arr_baggage'] || "Not decided", inline: true },
-						{ name: "ETD (Estimated Time of Departure)", value: `<t:${f['dep_estimated_ts'] || f['dep_time_ts']}>`, inline: true },
-						{ name: "ETA (Estimated Time of Arrival)", value: `<t:${f['arr_estimated_ts'] || f['arr_time_ts']}>`, inline: true },
+						{ name: "ETD (Estimated Time of Departure)", value: f['dep_estimated_ts'] || f['dep_time_ts'] ? "<t:" + (f['dep_estimated_ts'] || f['dep_time_ts']) + ">" : "N/A", inline: true },
+						{ name: "ETA (Estimated Time of Arrival)", value: f['arr_estimated_ts'] || f['arr_time_ts'] ? "<t:" + (f['arr_estimated_ts'] || f['arr_time_ts']) + ">" : "N/A", inline: true },
 						{ name: "Delayed", value: f['delay'] || "N/A", inline: true },
-						{ name: "Status", value: f['status'], inline: true }
+						{ name: "Status", value: f['status'] || "N/A", inline: true }
 					],
 					color: 5635925
 				}
